@@ -81,8 +81,18 @@ function startGame() {
                         if (checkWin(playerSymbol)) {
                             message.textContent = `${currentPlayer === 1 ? player1Name : player2Name} wins!`;
                             disableGrid(gridContainer);
+                            setTimeout(() => {
+                                if (confirm("Do you want to start a new game?")) {
+                                    resetGame(gameContainer);
+                                }
+                            }, 100); // Dodanie opóźnienia aby komunikat o wygranej był widoczny
                         } else if (grid.every(cell => cell !== null)) {
                             message.textContent = "It's a draw!";
+                            setTimeout(() => {
+                                if (confirm("Do you want to start a new game?")) {
+                                    resetGame(gameContainer);
+                                }
+                            }, 100); // Dodanie opóźnienia aby komunikat o remisie był widoczny
                         } else {
                             currentPlayer = 3 - currentPlayer; // Toggle between 1 and 2
                             message.textContent = `${currentPlayer === 1 ? player1Name : player2Name}'s turn`;
@@ -118,4 +128,17 @@ function disableGrid(gridContainer) {
     for (let square of squares) {
         square.style.pointerEvents = 'none';
     }
+}
+
+function resetGame(gameContainer) {
+    // Remove all children of gameContainer
+    while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+    }
+
+    // Reset the game state
+    grid = Array(9).fill(null);
+
+    // Restart the game
+    startGame();
 }
